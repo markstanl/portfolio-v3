@@ -1,10 +1,11 @@
 "use client";
 
-import { AsciiRenderer, useGLTF } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import { Canvas, useFrame, type ThreeEvent } from "@react-three/fiber";
 import { Suspense, useEffect, useRef } from "react";
-import { Mesh, MeshStandardMaterial } from "three";
+import { Color, Mesh, ShaderMaterial } from "three";
 import type { Group } from "three";
+import { createDoodleMaterials } from "./doodleMaterial";
 
 const MODEL_PATH = "/models/philosopher-bust2.glb";
 
@@ -40,15 +41,29 @@ function RotatingBust() {
   const { scene } = useGLTF(MODEL_PATH);
 
   useEffect(() => {
+    const rootStyle = getComputedStyle(document.documentElement);
+    const inkColor = new Color(
+      rootStyle.getPropertyValue("--color-ink").trim() || "#000000",
+    );
+    const paperColor = new Color(
+      rootStyle.getPropertyValue("--color-cream").trim() || "#fcfbf8",
+    );
+
+    // collect meshes before mutating the graph: traverse() walks the live
+    // children array, so adding outline meshes mid-traversal would recurse
+    const meshes: Mesh[] = [];
     scene.traverse((child) => {
-      if (child instanceof Mesh) {
-        child.material = new MeshStandardMaterial({
-          color: "#ffffff",
-          roughness: 0.55,
-          metalness: 0,
-        });
-      }
+      if (child instanceof Mesh) meshes.push(child);
     });
+
+    for (const mesh of meshes) {
+      // source model ships without a NORMAL accessor
+      if (!mesh.geometry.attributes.normal)
+        mesh.geometry.computeVertexNormals();
+      const { fill, outline } = createDoodleMaterials(inkColor, paperColor);
+      mesh.material = fill;
+      mesh.add(new Mesh(mesh.geometry, outline));
+    }
   }, [scene]);
 
   useFrame((threeState, delta) => {
@@ -66,6 +81,12 @@ function RotatingBust() {
         Math.min(1, delta * VELOCITY_DECAY);
       group.current.rotation.y += state.velocity * delta;
     }
+
+    group.current.traverse((child) => {
+      if (child instanceof Mesh && child.material instanceof ShaderMaterial) {
+        child.material.uniforms.uTime.value = threeState.clock.elapsedTime;
+      }
+    });
 
     // hover state only updates on native pointer events, so a stationary cursor
     // over a rotating model would otherwise keep a stale grab cursor forever
@@ -137,7 +158,9 @@ function RotatingBust() {
 useGLTF.preload(MODEL_PATH);
 
 /**
- * Rotating 3D philosopher bust rendered as ASCII art via three.js's AsciiEffect.
+ * Rotating 3D philosopher bust rendered with a hand-drawn "doodle" shader:
+ * flat toon-shaded fill plus an inverted-hull outline, both wobbling on a
+ * snapped low-fps jitter so it reads as sketched rather than rendered.
  * Grab the bust itself (not the surrounding canvas) and drag to spin it faster;
  * it eases back to the idle rotation speed on release.
  */
@@ -150,19 +173,9 @@ export default function PhilosopherHero() {
         gl={{ alpha: true }}
         style={{ touchAction: "none" }}
       >
-        <ambientLight intensity={0.25} />
-        <directionalLight position={[2, 2, 3]} intensity={1.1} />
-        <directionalLight position={[-2, 0.5, -2]} intensity={0.2} />
         <Suspense fallback={null}>
           <RotatingBust />
         </Suspense>
-        <AsciiRenderer
-          characters=" .:-+*=%@#\/|"
-          fgColor="var(--color-ink)"
-          bgColor="transparent"
-          invert={false}
-          resolution={0.3}
-        />
       </Canvas>
     </div>
   );
