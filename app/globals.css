@@ -6,6 +6,8 @@
   --color-footer: #dbdad7;
   --color-accent-purple: #521973;
   --color-placeholder-purple: #d3a6ed;
+  --color-doodle-purple: #f6edfa;
+  --color-doodle-blue: #eef5fd;
 }
 
 @theme inline {
@@ -14,6 +16,8 @@
   --color-footer: var(--color-footer);
   --color-accent-purple: var(--color-accent-purple);
   --color-placeholder-purple: var(--color-placeholder-purple);
+  --color-doodle-purple: var(--color-doodle-purple);
+  --color-doodle-blue: var(--color-doodle-blue);
   --font-caveat: var(--font-caveat);
   --font-noto-serif: var(--font-noto-serif);
   --font-cormorant: var(--font-cormorant);

@@ -1,11 +1,14 @@
 import * as THREE from "three";
 
 const SNAP_RATE = 6.0; // wobble redraws per second, low-fps look per Zucconi's doodle shader
-const JITTER_AMPLITUDE = 0.006; // object-space units
-const OUTLINE_THICKNESS = 0.018; // object-space units, inverted-hull extrusion
+const JITTER_AMPLITUDE = 0.04; // object-space units
+const OUTLINE_THICKNESS = 0.012; // object-space units, inverted-hull extrusion
 
-// hash-based pseudo-random per-vertex jitter, snapped to a low framerate so the
-// silhouette redraws itself in discrete jumps instead of drifting smoothly
+// per-vertex jitter snapped to a low framerate so the silhouette redraws in
+// discrete steps, but the offset at each step is a smooth (sine-based) drift
+// off the previous one rather than an independently re-randomized value —
+// like a rotoscope artist's hand-traced line crawling frame to frame instead
+// of flickering to a new position each time
 const WOBBLE_CHUNK = /* glsl */ `
   uniform float uTime;
   uniform float uSnapRate;
@@ -17,9 +20,17 @@ const WOBBLE_CHUNK = /* glsl */ `
     return fract((p.x + p.y) * p.z);
   }
 
+  float doodleCrawl(vec3 seed, float t) {
+    float freqA = 0.8 + doodleHash(seed) * 1.1;
+    float freqB = 1.6 + doodleHash(seed + 11.0) * 1.7;
+    float phaseA = doodleHash(seed + 3.0) * 6.2831853;
+    float phaseB = doodleHash(seed + 5.0) * 6.2831853;
+    return sin(t * freqA + phaseA) * 0.65 + sin(t * freqB + phaseB) * 0.35;
+  }
+
   vec3 doodleWobble(vec3 pos, vec3 normal) {
     float snappedTime = floor(uTime * uSnapRate) / uSnapRate;
-    float n = doodleHash(pos * 12.0 + snappedTime) - 0.5;
+    float n = doodleCrawl(pos * 12.0, snappedTime) * 0.5;
     return pos + normal * n * uJitterAmp;
   }
 `;
@@ -37,24 +48,24 @@ const FILL_VERTEX = /* glsl */ `
   }
 `;
 
-// flat toon shading: hard-stepped bands instead of smooth lighting, so the
-// bust reads as a few flat ink washes rather than a rendered 3D surface
+// flat toon shading: hard-stepped bands instead of smooth lighting. White
+// covers most of the surface; the two accent colors only show up as tight
+// highlight bands near-facing the light, not a blended gradient between them
 const FILL_FRAGMENT = /* glsl */ `
-  uniform vec3 uInkColor;
-  uniform vec3 uPaperColor;
+  uniform vec3 uBaseColor;
+  uniform vec3 uHighlightPurple;
+  uniform vec3 uHighlightBlue;
   uniform vec3 uLightDir;
   varying vec3 vNormal;
 
   void main() {
     float ndotl = max(dot(normalize(vNormal), uLightDir), 0.0);
-    vec3 color;
-    if (ndotl > 0.6) {
-      color = mix(uInkColor, uPaperColor, 0.85);
-    } else if (ndotl > 0.25) {
-      color = mix(uInkColor, uPaperColor, 0.45);
-    } else {
-      color = uInkColor;
-    }
+    // thin smoothstep transition at each band edge instead of a hard cutoff,
+    // so the boundary anti-aliases instead of staircasing pixel by pixel
+    float purpleMix = smoothstep(0.79, 0.81, ndotl);
+    float blueMix = smoothstep(0.91, 0.93, ndotl);
+    vec3 color = mix(uBaseColor, uHighlightPurple, purpleMix);
+    color = mix(color, uHighlightBlue, blueMix);
     gl_FragColor = vec4(color, 1.0);
   }
 `;
@@ -71,10 +82,10 @@ const OUTLINE_VERTEX = /* glsl */ `
 `;
 
 const OUTLINE_FRAGMENT = /* glsl */ `
-  uniform vec3 uInkColor;
+  uniform vec3 uOutlineColor;
 
   void main() {
-    gl_FragColor = vec4(uInkColor, 1.0);
+    gl_FragColor = vec4(uOutlineColor, 1.0);
   }
 `;
 
@@ -89,8 +100,10 @@ export type DoodleMaterials = {
  * for the wobble technique, adapted to 3D with a normal-extruded backface outline.
  */
 export function createDoodleMaterials(
-  inkColor: THREE.Color,
-  paperColor: THREE.Color,
+  outlineColor: THREE.Color,
+  baseColor: THREE.Color,
+  highlightPurple: THREE.Color,
+  highlightBlue: THREE.Color,
 ): DoodleMaterials {
   const lightDir = new THREE.Vector3(2, 2, 3).normalize();
 
@@ -101,8 +114,9 @@ export function createDoodleMaterials(
       uTime: { value: 0 },
       uSnapRate: { value: SNAP_RATE },
       uJitterAmp: { value: JITTER_AMPLITUDE },
-      uInkColor: { value: inkColor },
-      uPaperColor: { value: paperColor },
+      uBaseColor: { value: baseColor },
+      uHighlightPurple: { value: highlightPurple },
+      uHighlightBlue: { value: highlightBlue },
       uLightDir: { value: lightDir },
     },
   });
@@ -115,7 +129,7 @@ export function createDoodleMaterials(
       uSnapRate: { value: SNAP_RATE },
       uJitterAmp: { value: JITTER_AMPLITUDE },
       uOutlineThickness: { value: OUTLINE_THICKNESS },
-      uInkColor: { value: inkColor },
+      uOutlineColor: { value: outlineColor },
     },
     side: THREE.BackSide,
   });

@@ -42,11 +42,17 @@ function RotatingBust() {
 
   useEffect(() => {
     const rootStyle = getComputedStyle(document.documentElement);
-    const inkColor = new Color(
+    const outlineColor = new Color(
       rootStyle.getPropertyValue("--color-ink").trim() || "#000000",
     );
-    const paperColor = new Color(
+    const baseColor = new Color(
       rootStyle.getPropertyValue("--color-cream").trim() || "#fcfbf8",
+    );
+    const highlightPurple = new Color(
+      rootStyle.getPropertyValue("--color-doodle-purple").trim() || "#c9a8f7",
+    );
+    const highlightBlue = new Color(
+      rootStyle.getPropertyValue("--color-doodle-blue").trim() || "#9ad1f5",
     );
 
     // collect meshes before mutating the graph: traverse() walks the live
@@ -60,7 +66,12 @@ function RotatingBust() {
       // source model ships without a NORMAL accessor
       if (!mesh.geometry.attributes.normal)
         mesh.geometry.computeVertexNormals();
-      const { fill, outline } = createDoodleMaterials(inkColor, paperColor);
+      const { fill, outline } = createDoodleMaterials(
+        outlineColor,
+        baseColor,
+        highlightPurple,
+        highlightBlue,
+      );
       mesh.material = fill;
       mesh.add(new Mesh(mesh.geometry, outline));
     }
@@ -169,8 +180,8 @@ export default function PhilosopherHero() {
     <div className="ascii-hero relative aspect-square w-full select-none">
       <Canvas
         camera={{ position: [0, 0, 3.8], fov: 32 }}
-        dpr={1}
-        gl={{ alpha: true }}
+        dpr={[1, 2]}
+        gl={{ alpha: true, antialias: true }}
         style={{ touchAction: "none" }}
       >
         <Suspense fallback={null}>
