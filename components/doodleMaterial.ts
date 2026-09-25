@@ -3,6 +3,7 @@ import * as THREE from "three";
 const SNAP_RATE = 6.0; // wobble redraws per second, low-fps look per Zucconi's doodle shader
 const JITTER_AMPLITUDE = 0.04; // object-space units
 const OUTLINE_THICKNESS = 0.012; // object-space units, inverted-hull extrusion
+const NORMAL_CRAWL_AMOUNT = 0.08; // unit-normal perturbation magnitude
 
 // per-vertex jitter snapped to a low framerate so the silhouette redraws in
 // discrete steps, but the offset at each step is a smooth (sine-based) drift
@@ -13,6 +14,7 @@ const WOBBLE_CHUNK = /* glsl */ `
   uniform float uTime;
   uniform float uSnapRate;
   uniform float uJitterAmp;
+  uniform float uNormalCrawlAmount;
 
   float doodleHash(vec3 p) {
     p = fract(p * vec3(443.897, 441.423, 437.195));
@@ -28,10 +30,24 @@ const WOBBLE_CHUNK = /* glsl */ `
     return sin(t * freqA + phaseA) * 0.65 + sin(t * freqB + phaseB) * 0.35;
   }
 
-  vec3 doodleWobble(vec3 pos, vec3 normal) {
-    float snappedTime = floor(uTime * uSnapRate) / uSnapRate;
+  float doodleSnappedTime() {
+    return floor(uTime * uSnapRate) / uSnapRate;
+  }
+
+  vec3 doodleWobble(vec3 pos, vec3 normal, float snappedTime) {
     float n = doodleCrawl(pos * 12.0, snappedTime) * 0.5;
     return pos + normal * n * uJitterAmp;
+  }
+
+  // same crawl noise applied to the normal (offset seeds so it doesn't just
+  // mirror the position wobble), so the shading bands drift with the same
+  // hand-traced cadence as the outline instead of only moving on rotation
+  vec3 doodleNormalCrawl(vec3 pos, vec3 normal, float snappedTime) {
+    vec3 seed = pos * 12.0;
+    float nx = doodleCrawl(seed + 31.0, snappedTime);
+    float ny = doodleCrawl(seed + 57.0, snappedTime);
+    float nz = doodleCrawl(seed + 83.0, snappedTime);
+    return normalize(normal + vec3(nx, ny, nz) * uNormalCrawlAmount);
   }
 `;
 
@@ -42,8 +58,10 @@ const FILL_VERTEX = /* glsl */ `
   varying vec3 vNormal;
 
   void main() {
-    vNormal = normalize(mat3(modelMatrix) * normal);
-    vec3 wobbled = doodleWobble(position, normal);
+    float snappedTime = doodleSnappedTime();
+    vec3 crawledNormal = doodleNormalCrawl(position, normal, snappedTime);
+    vNormal = normalize(mat3(modelMatrix) * crawledNormal);
+    vec3 wobbled = doodleWobble(position, normal, snappedTime);
     gl_Position = projectionMatrix * modelViewMatrix * vec4(wobbled, 1.0);
   }
 `;
@@ -75,8 +93,9 @@ const OUTLINE_VERTEX = /* glsl */ `
   uniform float uOutlineThickness;
 
   void main() {
+    float snappedTime = doodleSnappedTime();
     vec3 extruded = position + normal * uOutlineThickness;
-    vec3 wobbled = doodleWobble(extruded, normal);
+    vec3 wobbled = doodleWobble(extruded, normal, snappedTime);
     gl_Position = projectionMatrix * modelViewMatrix * vec4(wobbled, 1.0);
   }
 `;
@@ -114,6 +133,7 @@ export function createDoodleMaterials(
       uTime: { value: 0 },
       uSnapRate: { value: SNAP_RATE },
       uJitterAmp: { value: JITTER_AMPLITUDE },
+      uNormalCrawlAmount: { value: NORMAL_CRAWL_AMOUNT },
       uBaseColor: { value: baseColor },
       uHighlightPurple: { value: highlightPurple },
       uHighlightBlue: { value: highlightBlue },
