@@ -6,6 +6,7 @@ export default function Nav() {
       <Link href="/#about">About</Link>
       <Link href="/blog?tag=Research">Research</Link>
       <Link href="/blog?tag=Music">Creative</Link>
+      <Link href="/contact">Contact</Link>
     </nav>
   );
 }
