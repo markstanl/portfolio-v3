@@ -16,7 +16,7 @@ export default function ContactPage() {
       <div className="flex w-full flex-col gap-2 font-caveat text-2xl text-black">
         <p>
           Always happy to talk shop! AI Safety, ML, philosophy, or anything
-          you're interested in.
+          you're interested in; I'm always trying to learn more!
         </p>
       </div>
 

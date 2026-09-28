@@ -50,7 +50,7 @@ export default function BlogTabs({ posts, initialTab }: BlogTabsProps) {
 
   return (
     <div className="flex w-full flex-col items-center gap-6">
-      <div className="flex flex-wrap items-center justify-center gap-6 font-caveat text-xl text-black">
+      <div className="flex flex-wrap items-center justify-center gap-3 font-caveat text-base text-black sm:gap-6 sm:text-xl">
         {TABS.map((tab) => (
           <button
             key={tab}

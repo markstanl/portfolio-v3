@@ -7,7 +7,7 @@ import type { BloglistEntry } from "@/types/sanity";
 
 export default function BlogCard({ post }: { post: BloglistEntry }) {
   const imageUrl = post.image
-    ? urlFor(post.image).width(600).height(340).fit("crop").url()
+    ? urlFor(post.image).width(440).height(248).fit("crop").url()
     : null;
 
   return (
@@ -27,14 +27,14 @@ export default function BlogCard({ post }: { post: BloglistEntry }) {
           {formatShortDate(post.publishedAt)}
         </p>
       </div>
-      <div className="relative flex aspect-video w-full shrink-0 items-center justify-center overflow-hidden rounded-lg bg-placeholder-purple md:w-2/5">
+      <div className="relative mx-auto flex aspect-video w-full max-w-xs shrink-0 items-center justify-center overflow-hidden rounded-lg bg-placeholder-purple md:mx-0 md:w-2/5 md:max-w-[220px]">
         {imageUrl ? (
           <Image
             src={imageUrl}
             alt=""
             fill
             className="object-cover"
-            sizes="(min-width: 768px) 40vw, 100vw"
+            sizes="(min-width: 768px) 220px, 320px"
           />
         ) : (
           <svg
