@@ -16,12 +16,12 @@ export default function BlogCard({ post }: { post: BloglistEntry }) {
       className="flex w-full flex-col items-start gap-4 rounded-lg bg-footer p-4 sm:p-6 md:flex-row md:items-center md:gap-6"
     >
       <div className="flex w-full flex-col items-start gap-3 md:flex-1">
-        <h3 className="font-noto-serif text-[24px] text-black">{post.title}</h3>
+        <h3 className="font-noto-serif text-2xl text-black">{post.title}</h3>
         {post.excerpt && (
-          <p className="font-caveat text-[16px] text-black">{post.excerpt}</p>
+          <p className="font-caveat text-base text-black">{post.excerpt}</p>
         )}
         <p
-          className="font-noto-serif text-[16px] text-black/60"
+          className="font-noto-serif text-base text-black/60"
           title={formatDate(post.publishedAt)}
         >
           {formatShortDate(post.publishedAt)}

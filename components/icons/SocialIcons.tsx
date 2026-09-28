@@ -10,7 +10,7 @@ import type { ReactNode } from "react";
  */
 
 const ICON_CLASS =
-  "size-[28px] text-black hover:text-accent-purple transition-colors duration-300";
+  "size-7 text-black hover:text-accent-purple transition-colors duration-300";
 
 function Badge({
   label,
@@ -48,7 +48,7 @@ function Badge({
 
 export default function SocialIcons() {
   return (
-    <div className="flex items-center gap-[16px]">
+    <div className="flex items-center gap-4">
       <Badge label="GitHub" maskId="mask-github">
         <path
           fill="none"

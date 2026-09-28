@@ -4,15 +4,15 @@ import SocialIcons from "@/components/icons/SocialIcons";
 
 export default function Home() {
   return (
-    <div className="flex w-full max-w-[913px] flex-col items-center gap-8 px-6 py-8 md:flex-row md:items-start">
-      <div className="flex w-full flex-col items-start gap-8 md:w-[460px] md:shrink-0">
+    <div className="flex w-full max-w-4xl flex-col items-center gap-8 px-6 py-8 md:flex-row md:items-start">
+      <div className="flex w-full flex-col items-start gap-8 md:w-full md:max-w-md md:shrink-0">
         <div className="flex w-full flex-col items-start gap-4">
           <h1 className="font-noto-serif text-5xl font-bold text-black sm:text-6xl">
             Mark Stanley
           </h1>
           <SocialIcons />
           <h2 className="font-noto-serif text-2xl text-accent-purple sm:text-3xl">
-            CS, Math, Philos @ UW-Madison
+            CS, Math, Phil @ UW-Madison
           </h2>
         </div>
 
@@ -23,11 +23,11 @@ export default function Home() {
           <p>I do AI research and spend my time philosophizing.</p>
           <p>Learning as much as I can so I can do some good with it.</p>
           <p>
-            I am doing my senior honors thesis in LLM generative uncertainty
+            My senior honors thesis is in LLM generative uncertainty
             quantification.
           </p>
           <p>
-            I am a SPAR mentee for an{" "}
+            Also a SPAR mentee for an{" "}
             <RoughLink href="https://sparai.org/projects/f26/rec9MdqTLmwjnxJo3/">
               emergent alignment
             </RoughLink>{" "}
@@ -37,7 +37,7 @@ export default function Home() {
       </div>
 
       <div className="flex w-full justify-center md:flex-1">
-        <div className="w-full max-w-[320px] md:w-[450px] md:max-w-none">
+        <div className="w-full max-w-xs md:max-w-md">
           <PhilosopherHero />
         </div>
       </div>

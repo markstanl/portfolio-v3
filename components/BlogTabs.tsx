@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 
 import BlogCard from "@/components/BlogCard";
 import type { BloglistEntry } from "@/types/sanity";
@@ -23,9 +24,14 @@ function resolveInitialTab(initialTab?: string): Tab {
 }
 
 export default function BlogTabs({ posts, initialTab }: BlogTabsProps) {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<Tab>(() =>
     resolveInitialTab(initialTab),
   );
+
+  useEffect(() => {
+    setActiveTab(resolveInitialTab(initialTab));
+  }, [initialTab]);
 
   const filteredPosts = useMemo(
     () =>
@@ -35,14 +41,21 @@ export default function BlogTabs({ posts, initialTab }: BlogTabsProps) {
     [posts, activeTab],
   );
 
+  function handleTabClick(tab: Tab) {
+    setActiveTab(tab);
+    router.push(tab === "All" ? "/blog" : `/blog?tag=${tab}`, {
+      scroll: false,
+    });
+  }
+
   return (
-    <div className="flex w-full flex-col items-center gap-[24px]">
-      <div className="flex flex-wrap items-center justify-center gap-[24px] font-caveat text-[20px] text-black">
+    <div className="flex w-full flex-col items-center gap-6">
+      <div className="flex flex-wrap items-center justify-center gap-6 font-caveat text-xl text-black">
         {TABS.map((tab) => (
           <button
             key={tab}
             type="button"
-            onClick={() => setActiveTab(tab)}
+            onClick={() => handleTabClick(tab)}
             className={
               tab === activeTab
                 ? "cursor-pointer underline decoration-2 underline-offset-4"
@@ -54,9 +67,9 @@ export default function BlogTabs({ posts, initialTab }: BlogTabsProps) {
         ))}
       </div>
 
-      <div className="flex w-full flex-col items-start gap-[16px]">
+      <div className="flex w-full flex-col items-start gap-4">
         {filteredPosts.length === 0 ? (
-          <p className="font-caveat text-[20px] text-black">
+          <p className="font-caveat text-xl text-black">
             Nothing here yet — check back soon.
           </p>
         ) : (
