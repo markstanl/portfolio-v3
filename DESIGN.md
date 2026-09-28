@@ -2,7 +2,7 @@
 
 **Structure:** Home, Research, Creative. Research and Creative share one reusable entry format: title, one-line description, date/tag, link. No cards, no thumbnails, no image-heavy project banners.
 
-**Voice:** methods-first, no overselling, matches your existing stated preference. Concrete over vague ("I care about the world" was cut for being sentiment with no content; kept for AI safety/animal welfare specifically because it's the actual differentiator, not because it sounds nice).
+**Voice:** methods-first, no overselling, matches your existing stated preference. Voice should carry a slightly poetic feel for language, used deliberately to show personality."
 
 **Base reference:** kaustubh.ml. Casual first-person copy, minimal info density, paper-esque restraint. Explicitly not the webring part of that site.
 

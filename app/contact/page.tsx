@@ -9,15 +9,35 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="flex w-full max-w-[720px] flex-col items-center gap-[38px] px-6 py-[24px]">
-      <h1 className="text-center font-noto-serif text-[48px] text-black">
+    <div className="flex w-full max-w-3xl flex-col items-center gap-10 px-6 py-6">
+      <h1 className="text-center font-noto-serif text-5xl text-black">
         Contact
       </h1>
-      <p className="w-full font-caveat text-[24px] text-black">
-        The fastest way to reach me is <RoughLink href="#">email</RoughLink> —
-        happy to talk AI safety research, collaboration, or anything else on
-        here.
-      </p>
+      <div className="flex w-full flex-col gap-2 font-caveat text-2xl text-black">
+        <p>
+          Always happy to talk shop! AI Safety, ML, philosophy, or anything
+          you're interested in.
+        </p>
+      </div>
+
+      <div className="flex w-full flex-col gap-2 font-caveat text-2xl text-black">
+        <p>
+          —{" "}
+          <RoughLink href="https://calendly.com/markstanl">
+            Coffee Chat
+          </RoughLink>
+        </p>
+        <p>
+          —{" "}
+          <RoughLink href="mailto:markgstanley1@gmail.com">Email me</RoughLink>
+        </p>
+        <p>
+          —{" "}
+          <RoughLink href="https://www.linkedin.com/in/markstanl/">
+            Connect on LinkedIn
+          </RoughLink>
+        </p>
+      </div>
     </div>
   );
 }
