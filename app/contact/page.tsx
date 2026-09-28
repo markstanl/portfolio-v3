@@ -1,42 +1,143 @@
 import type { Metadata } from "next";
 
 import RoughLink from "@/components/RoughLink";
+import RoughShape, { type Shape } from "@/components/RoughShape";
+import {
+  ChatBubbleIcon,
+  CoffeeCupIcon,
+  EnvelopeIcon,
+} from "@/components/icons/ContactIcons";
 
 export const metadata: Metadata = {
   title: "Contact | Mark Stanley",
   description: "Get in touch with Mark Stanley.",
 };
 
+const CARD_BORDER_SHAPES: Shape[] = [
+  {
+    type: "rectangle",
+    x: 4,
+    y: 4,
+    width: 392,
+    height: 252,
+    options: { roughness: 1.4, bowing: 0.6, strokeWidth: 2 },
+  },
+];
+
+const HORIZONTAL_DIVIDER_SHAPES: Shape[] = [
+  {
+    type: "line",
+    x1: 2,
+    y1: 2,
+    x2: 98,
+    y2: 2,
+    options: { roughness: 1, bowing: 1 },
+  },
+];
+
+const VERTICAL_DIVIDER_SHAPES: Shape[] = [
+  {
+    type: "line",
+    x1: 2,
+    y1: 2,
+    x2: 2,
+    y2: 98,
+    options: { roughness: 1, bowing: 1 },
+  },
+];
+
+const STAMP_SHAPES: Shape[] = [
+  {
+    type: "rectangle",
+    x: 4,
+    y: 4,
+    width: 48,
+    height: 48,
+    options: { roughness: 2.2, bowing: 1.4, strokeWidth: 1.8 },
+  },
+];
+
+const ICON_CLASS =
+  "size-5 shrink-0 text-black transition-colors duration-300 group-hover:text-accent-purple";
+
 export default function ContactPage() {
   return (
-    <div className="flex w-full max-w-3xl flex-col items-center gap-10 px-6 py-6">
+    <div className="flex w-full max-w-3xl flex-col items-center gap-8 px-6 py-6">
       <h1 className="text-center font-noto-serif text-5xl text-black">
         Contact
       </h1>
-      <div className="flex w-full flex-col gap-2 font-caveat text-2xl text-black">
-        <p>
-          Always happy to talk shop! AI Safety, ML, philosophy, or anything
-          you're interested in; I'm always trying to learn more!
-        </p>
-      </div>
 
-      <div className="flex w-full flex-col gap-2 font-caveat text-2xl text-black">
-        <p>
-          —{" "}
-          <RoughLink href="https://calendly.com/markstanl">
-            Coffee Chat
-          </RoughLink>
-        </p>
-        <p>
-          —{" "}
-          <RoughLink href="mailto:markgstanley1@gmail.com">Email me</RoughLink>
-        </p>
-        <p>
-          —{" "}
-          <RoughLink href="https://www.linkedin.com/in/markstanl/">
-            Connect on LinkedIn
-          </RoughLink>
-        </p>
+      <div className="relative w-full">
+        <RoughShape
+          viewBox="0 0 400 260"
+          preserveAspectRatio="none"
+          className="pointer-events-none absolute inset-0 size-full text-black/70"
+          shapes={CARD_BORDER_SHAPES}
+        />
+
+        <div className="relative z-10 flex flex-col md:flex-row">
+          <div className="flex flex-1 flex-col gap-4 p-6 font-caveat text-2xl text-black sm:p-8">
+            <p>
+              Always happy to talk shop! AI Safety, ML, philosophy, or anything
+              you&apos;re interested in; I&apos;m always trying to learn more!
+            </p>
+            <p>Don't be a stranger!</p>
+            <p className="self-end text-3xl font-bold text-accent-purple">
+              — Mark
+            </p>
+          </div>
+
+          <div className="block h-4 w-full md:hidden">
+            <RoughShape
+              viewBox="0 0 100 4"
+              preserveAspectRatio="none"
+              className="size-full text-black/40"
+              shapes={HORIZONTAL_DIVIDER_SHAPES}
+            />
+          </div>
+          <div className="hidden md:block md:h-auto md:w-4">
+            <RoughShape
+              viewBox="0 0 4 100"
+              preserveAspectRatio="none"
+              className="size-full text-black/40"
+              shapes={VERTICAL_DIVIDER_SHAPES}
+            />
+          </div>
+
+          <div className="flex flex-col gap-4 p-6 sm:p-8 md:w-56 md:shrink-0">
+            <div className="relative size-14 self-end">
+              <RoughShape
+                viewBox="0 0 56 56"
+                className="absolute inset-0 size-full text-accent-purple"
+                shapes={STAMP_SHAPES}
+              />
+              <span className="absolute inset-0 flex items-center justify-center font-caveat text-lg font-bold text-accent-purple">
+                MS
+              </span>
+            </div>
+
+            <div className="flex flex-col gap-3 font-caveat text-2xl text-black">
+              <div className="group flex items-center gap-2">
+                <CoffeeCupIcon className={ICON_CLASS} />
+                <RoughLink href="https://calendly.com/markstanl">
+                  Coffee Chat
+                </RoughLink>
+              </div>
+              <div className="group flex items-center gap-2">
+                <EnvelopeIcon className={ICON_CLASS} />
+                <RoughLink href="mailto:markgstanley1@gmail.com">
+                  Email me
+                </RoughLink>
+              </div>
+              <div className="group flex items-center gap-2">
+                <ChatBubbleIcon className={ICON_CLASS} />
+                <RoughLink href="https://www.linkedin.com/in/markstanl/">
+                  LinkedIn
+                </RoughLink>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
