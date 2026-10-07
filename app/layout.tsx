@@ -7,8 +7,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 
-import Footer from "@/components/Footer";
-import Nav from "@/components/Nav";
+import SiteChrome from "@/components/SiteChrome";
 
 const caveat = Caveat({
   variable: "--font-caveat",
@@ -47,9 +46,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${caveat.variable} ${notoSerif.variable} ${cormorantGaramond.variable} ${jetBrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-cream">
-        <Nav />
-        <main className="flex flex-1 flex-col items-center">{children}</main>
-        <Footer />
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );

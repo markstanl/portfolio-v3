@@ -6,3 +6,11 @@ const LIST_PROJECTION = `{_id, _type, title, slug, publishedAt, excerpt, tags, i
 export const allPostsQuery = `*[${BLOG_TYPES}] | order(publishedAt desc) ${LIST_PROJECTION}`;
 
 export const postBySlugQuery = `*[slug.current == $slug][0]`;
+
+export const linksPageQuery = `*[_type == "linksPage"][0]{
+  name,
+  taglines,
+  avatarInitials,
+  socials[]{platform, url},
+  links[]{label, url, icon}
+}`;

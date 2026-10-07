@@ -74,3 +74,29 @@ export type BloglistEntry = {
   image?: SanityImage;
   tags?: string[];
 };
+
+/** Icon choices available on the /links page; rendered via a code-owned SVG lookup. */
+export type LinkIconKey =
+  "github" | "linkedin" | "scholar" | "mail" | "globe" | "document" | "coffee";
+
+export type SocialLink = {
+  platform: LinkIconKey;
+  url: string;
+};
+
+export type ProfileLink = {
+  label: string;
+  url: string;
+  icon: LinkIconKey;
+};
+
+/** Singleton document backing /links. */
+export type LinksPage = {
+  _id: string;
+  _type: "linksPage";
+  name: string;
+  taglines?: string[];
+  avatarInitials: string;
+  socials?: SocialLink[];
+  links?: ProfileLink[];
+};
