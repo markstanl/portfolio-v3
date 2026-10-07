@@ -1,68 +1,45 @@
 import type { JSX, SVGProps } from "react";
 
+import { Coffee, FileUser, Globe, Newspaper } from "lucide-react";
+import {
+  siGithub,
+  siGooglescholar,
+  siInstagram,
+  siLetterboxd,
+} from "simple-icons";
+
 import type { LinkIconKey } from "@/types/sanity";
 
 export type IconProps = SVGProps<SVGSVGElement>;
 
 function GitHubIcon(props: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" {...props}>
-      <path
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M6.7 19c-4.3 1.3-4.3-2.2-6-2.7M12.7 21v-2.7c0-.8.3-1.5.7-2-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11 11 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.2.8 2.4V21"
-      />
+    <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+      <path d={siGithub.path} />
     </svg>
   );
 }
 
+// simple-icons has no LinkedIn mark (removed at LinkedIn's request), so this
+// uses Font Awesome Free's "in" glyph instead (viewBox 0 0 448 512, CC BY 4.0).
 function LinkedInIcon(props: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" {...props}>
-      <g
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <rect x={3} y={3} width={18} height={18} rx={3} />
-        <circle cx={7.2} cy={8} r={0.4} fill="currentColor" />
-        <path d="M7.2 11v6M12 17v-3.5c0-2 3-2 3 0V17M12 13.5c0-2.2-3-2.2-3 0V17" />
-      </g>
+    <svg viewBox="0 0 448 512" fill="currentColor" {...props}>
+      <path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z" />
     </svg>
   );
 }
 
 function ScholarIcon(props: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" {...props}>
-      <path
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="m3 9 9-5 9 5-9 5-9-5Zm4.5 2.4V16c0 1.7 2 3 4.5 3s4.5-1.3 4.5-3v-4.6"
-      />
+    <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+      <path d={siGooglescholar.path} />
     </svg>
   );
 }
 
 function GlobeIcon(props: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" {...props}>
-      <g
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <circle cx={12} cy={12} r={9} />
-        <path d="M3 12h18M12 3c2.5 2.5 3.8 5.6 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.6-3.8-9S9.5 5.5 12 3Z" />
-      </g>
-    </svg>
-  );
+  return <Globe strokeWidth={1.6} {...props} />;
 }
 
 function DocumentIcon(props: IconProps) {
@@ -80,52 +57,15 @@ function DocumentIcon(props: IconProps) {
 }
 
 function CoffeeIcon(props: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" {...props}>
-      <path
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M5 9h12v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V9Zm12 1h1.5a2.5 2.5 0 0 1 0 5H17"
-      />
-    </svg>
-  );
+  return <Coffee strokeWidth={1.6} {...props} />;
 }
 
 function BlogIcon(props: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" {...props}>
-      <g
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2V4Z" />
-        <path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7V4Z" />
-      </g>
-    </svg>
-  );
+  return <Newspaper strokeWidth={1.6} {...props} />;
 }
 
 function ResumeIcon(props: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" {...props}>
-      <g
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M5 2.5h5.5L14 6v7.3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1Z" />
-        <path d="M10.5 2.5V6H14" />
-        <path d="M6.3 9h4.4M6.3 11.3h3" />
-        <circle cx={17.2} cy={17.2} r={5.3} />
-        <path d="M17.2 14.9v4.5M15.3 17.9l1.9 1.9 1.9-1.9" />
-      </g>
-    </svg>
-  );
+  return <FileUser strokeWidth={1.6} {...props} />;
 }
 
 function MailIcon(props: IconProps) {
@@ -144,24 +84,16 @@ function MailIcon(props: IconProps) {
 
 function InstagramIcon(props: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" {...props}>
-      <g stroke="currentColor" strokeWidth={1.6} strokeLinejoin="round">
-        <rect x={3} y={3} width={18} height={18} rx={5} />
-        <circle cx={12} cy={12} r={4} />
-      </g>
-      <circle cx={17.5} cy={6.5} r={1} fill="currentColor" />
+    <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+      <path d={siInstagram.path} />
     </svg>
   );
 }
 
 function LetterboxdIcon(props: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" {...props}>
-      <g stroke="currentColor" strokeWidth={1.6}>
-        <circle cx={7} cy={12} r={5} />
-        <circle cx={12} cy={12} r={5} />
-        <circle cx={17} cy={12} r={5} />
-      </g>
+    <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+      <path d={siLetterboxd.path} />
     </svg>
   );
 }
