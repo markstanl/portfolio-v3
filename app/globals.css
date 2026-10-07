@@ -24,6 +24,7 @@
   --font-mono: var(--font-mono);
 }
 
+html,
 body {
   background: var(--color-cream);
   color: var(--color-ink);

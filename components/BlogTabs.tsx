@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import BlogCard from "@/components/BlogCard";
 import type { BloglistEntry } from "@/types/sanity";
@@ -28,10 +28,12 @@ export default function BlogTabs({ posts, initialTab }: BlogTabsProps) {
   const [activeTab, setActiveTab] = useState<Tab>(() =>
     resolveInitialTab(initialTab),
   );
+  const [prevInitialTab, setPrevInitialTab] = useState(initialTab);
 
-  useEffect(() => {
+  if (initialTab !== prevInitialTab) {
+    setPrevInitialTab(initialTab);
     setActiveTab(resolveInitialTab(initialTab));
-  }, [initialTab]);
+  }
 
   const filteredPosts = useMemo(
     () =>

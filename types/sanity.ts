@@ -75,19 +75,32 @@ export type BloglistEntry = {
   tags?: string[];
 };
 
-/** Icon choices available on the /links page; rendered via a code-owned SVG lookup. */
+/** Known icon keys with a code-owned SVG; anything else falls back to a generic globe icon. */
 export type LinkIconKey =
-  "github" | "linkedin" | "scholar" | "mail" | "globe" | "document" | "coffee";
+  | "github"
+  | "linkedin"
+  | "scholar"
+  | "mail"
+  | "globe"
+  | "document"
+  | "coffee"
+  | "instagram"
+  | "letterboxd"
+  | "blog"
+  | "resume";
 
 export type SocialLink = {
-  platform: LinkIconKey;
+  platform: string;
   url: string;
 };
 
+/** Primary link row icon: a code-handled key, an uploaded image, or none. */
 export type ProfileLink = {
   label: string;
   url: string;
-  icon: LinkIconKey;
+  iconType: "icon" | "image" | "none";
+  icon?: string;
+  image?: SanityImage;
 };
 
 /** Singleton document backing /links. */
@@ -96,7 +109,21 @@ export type LinksPage = {
   _type: "linksPage";
   name: string;
   taglines?: string[];
+  avatarImage?: SanityImage;
   avatarInitials: string;
   socials?: SocialLink[];
   links?: ProfileLink[];
+};
+
+/** Singleton document backing /cv. */
+export type CvPage = {
+  _id: string;
+  _type: "cvPage";
+  downloadLabel?: string;
+  file: {
+    asset: {
+      url: string;
+      originalFilename?: string;
+    };
+  };
 };

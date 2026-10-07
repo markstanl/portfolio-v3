@@ -4,12 +4,10 @@ import { notFound } from "next/navigation";
 import PortableTextContent from "@/components/PortableTextContent";
 import RoughLink from "@/components/RoughLink";
 import { formatDate } from "@/lib/formatDate";
-import { client } from "@/lib/sanity/client";
+import { client, fetchOptions } from "@/lib/sanity/client";
 import { postBySlugQuery } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
 import type { BlogEntry } from "@/types/sanity";
-
-const options = { next: { revalidate: 30 } };
 
 export default async function ArticlePage({
   params,
@@ -18,7 +16,7 @@ export default async function ArticlePage({
   const post = await client.fetch<BlogEntry | null>(
     postBySlugQuery,
     { slug },
-    options,
+    fetchOptions,
   );
 
   if (!post) {

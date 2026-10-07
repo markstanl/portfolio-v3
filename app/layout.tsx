@@ -8,6 +8,7 @@ import {
 import "./globals.css";
 
 import SiteChrome from "@/components/SiteChrome";
+import { SITE_URL } from "@/lib/site";
 
 const caveat = Caveat({
   variable: "--font-caveat",
@@ -35,6 +36,7 @@ const cormorantGaramond = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Mark Stanley",
   description: "CS, Math, Philos @ UW-Madison",
 };

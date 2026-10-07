@@ -1,15 +1,8 @@
 import RoughShape, { type Shape } from "@/components/RoughShape";
+import { ROUGH_ICON_OPTIONS as ICON_OPTIONS } from "@/components/icons/sharedIconStyles";
 
 type IconProps = {
   className?: string;
-};
-
-const ICON_OPTIONS = {
-  roughness: 0.5,
-  bowing: 0.3,
-  strokeWidth: 1.3,
-  maxRandomnessOffset: 0.6,
-  curveFitting: 0.98,
 };
 
 const ENVELOPE_SHAPES: Shape[] = [

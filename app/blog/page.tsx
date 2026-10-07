@@ -1,13 +1,15 @@
 import BlogList from "@/components/BlogList";
-import { client } from "@/lib/sanity/client";
+import { client, fetchOptions } from "@/lib/sanity/client";
 import { allPostsQuery } from "@/lib/sanity/queries";
 import type { BloglistEntry } from "@/types/sanity";
 
-const options = { next: { revalidate: 30 } };
-
 export default async function BlogPage({ searchParams }: PageProps<"/blog">) {
   const { tag } = await searchParams;
-  const posts = await client.fetch<BloglistEntry[]>(allPostsQuery, {}, options);
+  const posts = await client.fetch<BloglistEntry[]>(
+    allPostsQuery,
+    {},
+    fetchOptions,
+  );
 
   return (
     <BlogList

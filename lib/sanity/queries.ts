@@ -10,7 +10,13 @@ export const postBySlugQuery = `*[slug.current == $slug][0]`;
 export const linksPageQuery = `*[_type == "linksPage"][0]{
   name,
   taglines,
+  avatarImage,
   avatarInitials,
   socials[]{platform, url},
-  links[]{label, url, icon}
+  links[]{label, url, iconType, icon, image}
+}`;
+
+export const cvPageQuery = `*[_type == "cvPage"][0]{
+  downloadLabel,
+  file{asset->{url, originalFilename}}
 }`;

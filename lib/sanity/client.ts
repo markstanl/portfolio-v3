@@ -10,3 +10,6 @@ export const client = createClient({
   apiVersion: "2024-01-01",
   useCdn: false,
 });
+
+/** Shared `client.fetch` options for page data that can go a little stale. */
+export const fetchOptions = { next: { revalidate: 30 } };
